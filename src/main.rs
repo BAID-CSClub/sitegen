@@ -29,10 +29,10 @@ fn main() {
         );
     let matches = cmd.get_matches();
 
-    let mut frontend = matches.value_of("frontend").unwrap().split(":");
+    let mut frontend = matches.value_of("frontend").unwrap().split(':');
 
     let out = Path::new(matches.value_of("out").unwrap());
-    let articles = matches.value_of("articles").unwrap();
+    let _articles = matches.value_of("articles").unwrap();
 
     let repo = frontend.next().unwrap();
     let branch = if let Some(b) = frontend.next() {

@@ -1,7 +1,6 @@
 use std::{fmt::Write, path::Path};
 
 use anyhow::Ok;
-use colorful::Colorful;
 use git2::{
     build::{CheckoutBuilder, RepoBuilder},
     FetchOptions,
