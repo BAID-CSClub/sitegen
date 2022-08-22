@@ -6,12 +6,11 @@ For simplify, this tool has *no* subcommands. The only function is to generate a
 
 This tool *do* need some arguments:
 
-- `--git <REPO>:<BRANCH>`: The repo of the frontend project, by default is: `https://github.com/BAID-CSClub/baid-website-next.git:build` 
+- `--frontend <REPO>:<BRANCH>`: The repo of the frontend project, by default is: `https://github.com/BAID-CSClub/baid-website-next.git:build`
 
 - `--out <DIR>`: The output dir, by default is: `./dist`
 
-- `--in <DIR>`: The articles dir, by default is: `./`
-
+- `--articles <DIR>`: The articles dir, by default is: `./`
 
 ## 流程
 
@@ -31,3 +30,4 @@ This tool *do* need some arguments:
 
 ## 注意事项
 
+- 所有图片文件会被转换为 `webp` 格式
