@@ -81,7 +81,6 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
                 anyhow::bail!("The path {} must end with .html", out_path.display());
             }
             std::fs::create_dir_all(out_path.parent().unwrap())?;
-            dbg!(&out_path);
             let mut out_file = std::fs::File::create(out_path)?;
             let temp = template
                 .replace(
