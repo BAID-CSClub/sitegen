@@ -1,0 +1,37 @@
+[global]
+
+[global.zh-CN]
+title_prefix = "北京中学国际部 - "
+title_suffix = " - 后缀示例"
+
+[global.en-US]
+title_prefix = "Baid Website - "
+title_suffix = " - Suffix Example"
+
+[[routes]]
+path = "/index.html"
+robots = "index, follow"
+
+[routes.zh-CN]
+title = "首页"
+description = "这是一个首页"
+
+[routes.en-US]
+title = "Home"
+description = "This is a home page"
+
+[[routes]]
+path = "/about.html"
+robots = "index, follow"
+
+[routes.zh-CN]
+title = "关于"
+description = "这是一个关于页面"
+
+[routes.en-US]
+title = "About"
+description = "This is an about page"
+
+[[routes]]
+path = "/education.html"
+robots = "index, follow"

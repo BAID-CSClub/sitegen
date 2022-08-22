@@ -12,5 +12,8 @@ clap = "3.2.16"
 colorful = "0.2.1"
 git2 = "0.15.0"
 indicatif = "0.17.0"
+minify-html = "0.9.2"
 ravif = "0.8.9"
+serde = { version = "1.0.144", features = ["derive"] }
+toml = "0.5.9"
 # libvips = "1.4.3"
