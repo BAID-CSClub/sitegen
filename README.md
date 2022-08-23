@@ -25,7 +25,8 @@ This tool *do* need some arguments:
 ---
 
 > 1. 在 *output dir* 和 *articles dir* 中寻找 `routes.toml`
-> 2. 构建静态路由，为 `<OUTPUT>/index.html` 添加元数据
+> 2. 构建静态路由，为模板添加元数据
+> 3. 构建内部链接优化，为模板添加（对用户隐藏的）内部链接
 
 最后的步骤：
 

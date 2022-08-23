@@ -35,3 +35,11 @@ description = "This is an about page"
 [[routes]]
 path = "/education.html"
 robots = "index, follow"
+
+[routes.zh-CN]
+title = "教育"
+description = "这是一个教育页面"
+
+[routes.en-US]
+title = "Education"
+description = "This is an education page"

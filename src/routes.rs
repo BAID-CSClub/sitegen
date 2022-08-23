@@ -57,6 +57,35 @@ impl Config {
         };
         format!("{}{}{}", prefix, title, suffix)
     }
+    pub fn generate_links(&self, except_path: &str) -> String {
+        let template = r#"<a href="{path}" alt="{alt}">{title}</a>"#;
+        let mut links = String::new();
+        for route in &self.routes {
+            if route.path == except_path {
+                continue;
+            }
+            for lang in &["zh-CN", "en-US"] {
+                let title = if lang == &"zh-CN" {
+                    &route.zh.title
+                } else {
+                    &route.en.title
+                };
+                let title = self.decorate_title(lang, title);
+                let description = if lang == &"zh-CN" {
+                    &route.zh.description
+                } else {
+                    &route.en.description
+                };
+                let link = template
+                    .replace("{path}", &route.path)
+                    .replace("{alt}", description)
+                    .replace("{title}", &title);
+
+                links.push_str(&link);
+            }
+        }
+        links
+    }
 }
 
 pub fn minify(template: String) -> anyhow::Result<String> {
@@ -71,11 +100,15 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
     // Available handlebars: {{title}} {{description}} {{robots}} {{lang}}
     for route in &config.routes {
         for lang in ["zh-CN", "en-US"] {
-            let out_path = out.join(lang).join(if route.path.starts_with("/") {
-                format!(".{}", &route.path)
-            } else {
-                format!("{}", &route.path)
-            });
+            let path = route.path.trim_matches('/');
+            let out_path = out.join(lang).join(path);
+            // 另一种语言的页面，用于生成link rel="alternate"
+            let alternate_link = format!(
+                "/{}/{}",
+                if lang == "zh-CN" { "en-US" } else { "zh-CN" },
+                path
+            );
+
             // Check if the path ends with .html
             if !out_path.extension().eq(&Some(std::ffi::OsStr::new("html"))) {
                 anyhow::bail!("The path {} must end with .html", out_path.display());
@@ -105,7 +138,15 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
                     },
                 )
                 .replace("{{robots}}", &route.robots)
-                .replace("{{lang}}", lang);
+                .replace("{{lang}}", lang)
+                .replace("{{alternate}}", &alternate_link)
+                .replace(
+                    "{{alternateLang}}",
+                    if lang == "zh-CN" { "en-US" } else { "zh-CN" },
+                );
+            let links = config.generate_links(&route.path);
+            // Insert links after <body>
+            let temp = temp.replace("<body>", &format!("<body>{}", links));
             let minified = minify(temp)?;
             out_file.write_all(minified.as_bytes())?;
         }

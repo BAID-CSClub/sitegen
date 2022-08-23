@@ -11,25 +11,28 @@ fn main() {
         .subcommand_required(false)
         .arg(
             clap::Arg::new("frontend")
-                .help("The repo of the frontend project <REPO>:<BRANCH>")
-                .default_value("https://github.com/BAID-CSClub/baid-website-next.git:build")
+                .long("frontend")
+                .help("The repo of the frontend project <REPO>|<BRANCH>")
+                .default_value("https://hub.fastgit.xyz/BAID-CSClub/baid-website-next.git|build")
                 .required(false),
         )
         .arg(
             clap::Arg::new("out")
+                .long("out")
                 .help("The output directory")
                 .default_value("./dist")
                 .required(false),
         )
         .arg(
             clap::Arg::new("articles")
+                .long("articles")
                 .help("The articles directory")
                 .default_value("./")
                 .required(false),
         );
     let matches = cmd.get_matches();
 
-    let mut frontend = matches.value_of("frontend").unwrap().split(':');
+    let mut frontend = matches.value_of("frontend").unwrap().split('|');
 
     let out = Path::new(matches.value_of("out").unwrap());
     let articles = Path::new(matches.value_of("articles").unwrap());
