@@ -20,13 +20,13 @@ This tool *do* need some arguments:
 
 > 1. 遍历 *articles dir* 并解析文章
 > 2. 构建文章的静态文件依赖树，处理后全部放到 `<OUTPUT>/assets/` 里面
-> 3. 生成文章目录结构，生成文章元数据
+> 3. 生成文章元数据（`<OUTPUT>/articles/<id>.json`），编译文章（`<OUTPUT>/articles/<id>.html`）
 
 ---
 
 > 1. 在 *output dir* 和 *articles dir* 中寻找 `routes.toml`
 > 2. 构建静态路由，为模板添加元数据
-> 3. 构建内部链接优化，为模板添加（对用户隐藏的）内部链接
+> 3. 写入 `<OUTPUT>/index.html`
 
 最后的步骤：
 
@@ -34,7 +34,7 @@ This tool *do* need some arguments:
 
 ## 注意事项
 
-- 所有图片文件会被转换为 `avif` 格式，并保留原始格式（命名相同）
+- 所有图片文件会被转换为 `webp` 格式，并保留原始格式（命名相同）
 
 - 目前仅支持 `jpeg` 和 `png` 格式的图片，其他格式的图片不会被转换（但是可以显示）
 

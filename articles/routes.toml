@@ -17,6 +17,7 @@ title = "首页"
 description = "这是一个首页"
 
 [routes.en-US]
+default = true # This will be rewrite to /index.html
 title = "Home"
 description = "This is a home page"
 
@@ -43,3 +44,5 @@ description = "这是一个教育页面"
 [routes.en-US]
 title = "Education"
 description = "This is an education page"
+
+# More

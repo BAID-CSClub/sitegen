@@ -56,8 +56,8 @@ pub fn clone_to<S: AsRef<str>>(repo: S, branch: S, out: &Path) -> anyhow::Result
 fn test_clone() -> anyhow::Result<()> {
     info!("Testing clone");
     clone_to(
-        "https://github.com/BAID-CSClub/baid-website-next.git",
+        "https://cdn.bdbmzwsc.top/BAID-CSClub/baid-website-next.git",
         "build",
-        Path::new("./dist"),
+        Path::new("./dist-original"),
     )
 }

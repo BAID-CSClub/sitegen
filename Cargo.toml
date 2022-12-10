@@ -7,13 +7,15 @@ version = "0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = { version = "1.0.62", features = ["backtrace"] }
-clap = "3.2.16"
+anyhow = { version = "1.0.66", features = ["backtrace"] }
+clap = "4.0.29"
 colorful = "0.2.1"
+comrak = "0.15.0"
 git2 = "0.15.0"
-indicatif = "0.17.0"
-minify-html = "0.9.2"
-ravif = "0.8.9"
-serde = { version = "1.0.144", features = ["derive"] }
+indicatif = "0.17.2"
+minify-html = "0.10.3"
+ravif = { version = "0.10.0", default-features = false }
+serde = { version = "1.0.149", features = ["derive"] }
+serde_yaml = "0.9.14"
 toml = "0.5.9"
 # libvips = "1.4.3"

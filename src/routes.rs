@@ -19,6 +19,7 @@ struct Lang<T> {
 struct RouteSubConfig {
     title: String,
     description: String,
+    default: Option<bool>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -57,35 +58,6 @@ impl Config {
         };
         format!("{}{}{}", prefix, title, suffix)
     }
-    pub fn generate_links(&self, except_path: &str) -> String {
-        let template = r#"<a href="{path}" alt="{alt}">{title}</a>"#;
-        let mut links = String::new();
-        for route in &self.routes {
-            if route.path == except_path {
-                continue;
-            }
-            for lang in &["zh-CN", "en-US"] {
-                let title = if lang == &"zh-CN" {
-                    &route.zh.title
-                } else {
-                    &route.en.title
-                };
-                let title = self.decorate_title(lang, title);
-                let description = if lang == &"zh-CN" {
-                    &route.zh.description
-                } else {
-                    &route.en.description
-                };
-                let link = template
-                    .replace("{path}", &route.path)
-                    .replace("{alt}", description)
-                    .replace("{title}", &title);
-
-                links.push_str(&link);
-            }
-        }
-        links
-    }
 }
 
 pub fn minify(template: String) -> anyhow::Result<String> {
@@ -97,7 +69,7 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
     let config = Config::load(routes_path)?;
 
     let template = std::fs::read_to_string(out.join("index.html"))?;
-    // Available handlebars: {{title}} {{description}} {{robots}} {{lang}}
+
     for route in &config.routes {
         for lang in ["zh-CN", "en-US"] {
             let path = route.path.trim_matches('/');
@@ -115,28 +87,17 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
             }
             std::fs::create_dir_all(out_path.parent().unwrap())?;
             let mut out_file = std::fs::File::create(out_path)?;
+            let sub_config = if lang == "zh-CN" {
+                &route.zh
+            } else {
+                &route.en
+            };
             let temp = template
                 .replace(
                     "{{title}}",
-                    config
-                        .decorate_title(
-                            &lang,
-                            if lang == "zh-CN" {
-                                &route.zh.title
-                            } else {
-                                &route.en.title
-                            },
-                        )
-                        .as_str(),
+                    config.decorate_title(&lang, &sub_config.title).as_str(),
                 )
-                .replace(
-                    "{{description}}",
-                    if lang == "zh-CN" {
-                        &route.zh.description
-                    } else {
-                        &route.en.description
-                    },
-                )
+                .replace("{{description}}", &sub_config.title)
                 .replace("{{robots}}", &route.robots)
                 .replace("{{lang}}", lang)
                 .replace("{{alternate}}", &alternate_link)
@@ -144,11 +105,11 @@ pub fn build(routes_path: &Path, out: &Path) -> anyhow::Result<()> {
                     "{{alternateLang}}",
                     if lang == "zh-CN" { "en-US" } else { "zh-CN" },
                 );
-            let links = config.generate_links(&route.path);
-            // Insert links after <body>
-            let temp = temp.replace("<body>", &format!("<body>{}", links));
-            let minified = minify(temp)?;
-            out_file.write_all(minified.as_bytes())?;
+            let minified = minify(temp)?.into_bytes();
+            if sub_config.default.unwrap_or(false) {
+                std::fs::File::create(out.join("index.html"))?.write(&minified)?;
+            }
+            out_file.write_all(&minified)?;
         }
     }
 
